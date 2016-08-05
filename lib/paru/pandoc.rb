@@ -9,9 +9,10 @@ module Paru
 
   class Pandoc
 
-    def initialize &block 
+    def initialize &block
       @options = {}
       configure(&block) if block_given?
+      @option_sep = "\t"
     end
 
     def configure &block
@@ -23,7 +24,7 @@ module Paru
     # configures in this Pandoc instance.
     def convert input
       output = ''
-      IO.popen(to_command, 'r+') do |p|
+      IO.popen(to_command(@option_sep), 'r+') do |p|
         p << input
         p.close_write
         output << p.read
@@ -32,7 +33,7 @@ module Paru
     end
     alias << convert
 
-    def to_command option_sep = " \\\n\t"
+    def to_command option_sep = "\t\\\n"
       "pandoc\t#{to_option_string option_sep}"
     end
 
@@ -60,13 +61,13 @@ module Paru
       end
       options_arr.join(option_sep)
     end
-    
+
     # Pandoc has a number of command line options. Most are simple options,
     # like flags, that can be set only once. Other options can occur more than
     # once, such as the css option: to add more than one css file to a
     # generated standalone html file, use the css options once for each
     # stylesheet to include. Other options do have the pattern key[:value],
-    # which can also occur multiple times, such as metadata. 
+    # which can also occur multiple times, such as metadata.
     #
     # All options are specified in a pandoc_options.yaml. If it is an option
     # that can occur only once, the value of the option in that yaml file is

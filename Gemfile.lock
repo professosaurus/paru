@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    paru (0.1.0)
+
+GEM
+  specs:
+
+PLATFORMS
+  x86-mingw32
+
+DEPENDENCIES
+  paru!
+
+BUNDLED WITH
+   1.12.5
